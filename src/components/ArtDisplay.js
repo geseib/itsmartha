@@ -10,6 +10,7 @@ const ArtDisplay = () => {
   const [hideTimer, setHideTimer] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showBio, setShowBio] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const timerOptions = [
     { value: 10, label: '10s' },
@@ -38,9 +39,13 @@ const ArtDisplay = () => {
     setImageLoaded(true);
   };
 
-  const handleNextArt = () => {
+  const handleNextArt = useCallback(() => {
     loadNewArt();
-  };
+  }, [loadNewArt]);
+
+  const handlePreviousArt = useCallback(() => {
+    loadNewArt(); // For now, just loads random art. Could be enhanced to track history
+  }, [loadNewArt]);
 
   const handleTimerSelect = (seconds) => {
     setSelectedTimer(seconds);
@@ -53,6 +58,68 @@ const ArtDisplay = () => {
   const toggleBio = () => {
     setShowBio(!showBio);
   };
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+      }).catch(err => {
+        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen().then(() => {
+        setIsFullscreen(false);
+      }).catch(err => {
+        console.error(`Error attempting to exit fullscreen: ${err.message}`);
+      });
+    }
+  };
+
+  // Listen for fullscreen changes (when user presses ESC)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      switch (event.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          event.preventDefault();
+          handleNextArt();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          event.preventDefault();
+          handlePreviousArt();
+          break;
+        case ' ': // Spacebar
+          event.preventDefault();
+          handleNextArt();
+          break;
+        case 'f':
+        case 'F':
+          event.preventDefault();
+          toggleFullscreen();
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleNextArt, handlePreviousArt, toggleFullscreen]);
 
   // Handle mouse movement to show/hide controls
   const handleMouseMove = useCallback(() => {
@@ -120,6 +187,7 @@ const ArtDisplay = () => {
             alt="Martha's Art"
             className="art-image"
             onLoad={handleImageLoad}
+            onClick={handleNextArt}
             style={{ opacity: imageLoaded ? 1 : 0, transition: 'opacity 0.5s' }}
           />
         </div>
@@ -160,6 +228,14 @@ const ArtDisplay = () => {
             title="View Martha's Biography"
           >
             👤
+          </button>
+
+          <button
+            className="timer-button fullscreen-toggle"
+            onClick={toggleFullscreen}
+            title={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+          >
+            {isFullscreen ? '🪟' : '⛶'}
           </button>
         </div>
         
