@@ -1,0 +1,475 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: #f5f5f5;
+}
+
+.art-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 1s ease-in;
+}
+
+.art-container.landscape {
+  flex-direction: row;
+  gap: 4rem;
+}
+
+.art-container.portrait {
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.art-image-wrapper {
+  position: relative;
+  max-width: 60%;
+  max-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.art-container.portrait .art-image-wrapper {
+  max-width: 90%;
+  max-height: 60vh;
+}
+
+.art-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.poetry-container {
+  max-width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.art-container.portrait .poetry-container {
+  max-width: 90%;
+  text-align: center;
+}
+
+.poetry-text {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: bold;
+  line-height: 1.4;
+  color: #333;
+  letter-spacing: -0.02em;
+}
+
+.poetry-author {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 600;
+  color: #666;
+  font-style: italic;
+}
+
+.controls {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.controls.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.controls.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+.timer-buttons {
+  display: flex;
+  gap: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 50px;
+  padding: 0.5rem;
+}
+
+.timer-button {
+  padding: 0.75rem 1.25rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #333;
+  border: none;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  min-width: 60px;
+}
+
+.timer-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.timer-button.active {
+  background-color: #333;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.next-button {
+  padding: 1rem 2rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.next-button:hover {
+  background-color: #555;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode-toggle,
+.bio-toggle {
+  font-size: 1.1rem !important;
+  padding: 0.75rem !important;
+  min-width: auto !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bio Overlay Styles */
+.bio-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.bio-overlay.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.bio-overlay.hidden {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+.bio-content {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  margin: 2rem;
+}
+
+.bio-content h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.bio-text {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #444;
+}
+
+.bio-text p {
+  margin-bottom: 1.5rem;
+}
+
+.bio-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #666;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.bio-close:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+/* Dark Mode Styles */
+.app.dark-mode {
+  background-color: #1a1a1a;
+}
+
+.app.dark-mode body {
+  background-color: #1a1a1a;
+}
+
+.app.dark-mode .poetry-text {
+  color: #e0e0e0;
+}
+
+.app.dark-mode .poetry-author {
+  color: #b0b0b0;
+}
+
+.app.dark-mode .timer-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+}
+
+.app.dark-mode .timer-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.app.dark-mode .timer-button.active {
+  background-color: #666;
+  color: white;
+}
+
+.app.dark-mode .timer-buttons {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.app.dark-mode .next-button {
+  background-color: #666;
+}
+
+.app.dark-mode .next-button:hover {
+  background-color: #777;
+}
+
+.app.dark-mode .bio-content {
+  background: #2a2a2a;
+}
+
+.app.dark-mode .bio-content h2 {
+  color: #e0e0e0;
+}
+
+.app.dark-mode .bio-text {
+  color: #c0c0c0;
+}
+
+.app.dark-mode .bio-close {
+  color: #b0b0b0;
+}
+
+.app.dark-mode .bio-close:hover {
+  background-color: #3a3a3a;
+  color: #e0e0e0;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .app {
+    padding: 1rem;
+  }
+
+  .art-container {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .art-container.landscape {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .art-image-wrapper {
+    max-width: 100%;
+    max-height: 50vh;
+  }
+
+  .art-container.portrait .art-image-wrapper {
+    max-width: 100%;
+    max-height: 50vh;
+  }
+
+  .poetry-container {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .art-container.landscape .poetry-container {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .poetry-text {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+  }
+
+  .poetry-author {
+    font-size: clamp(0.9rem, 3vw, 1.2rem);
+  }
+
+  .controls {
+    bottom: 1rem;
+    right: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .timer-buttons {
+    order: 2;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .timer-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+    min-width: 50px;
+  }
+
+  .dark-mode-toggle,
+  .bio-toggle {
+    font-size: 1rem !important;
+    padding: 0.6rem !important;
+  }
+
+  .bio-content {
+    padding: 2rem;
+    margin: 1rem;
+    max-height: 90vh;
+  }
+
+  .bio-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .bio-text {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .bio-close {
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 1.5rem;
+    width: 35px;
+    height: 35px;
+  }
+
+  .app.dark-mode .timer-buttons {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .next-button {
+    order: 1;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* Large TV screen styles */
+@media (min-width: 1920px) {
+  .poetry-text {
+    font-size: 3rem;
+  }
+
+  .poetry-author {
+    font-size: 2rem;
+  }
+
+  .art-container.landscape {
+    gap: 6rem;
+  }
+
+  .next-button {
+    padding: 1.5rem 3rem;
+    font-size: 1.4rem;
+  }
+}
+
+/* 4K TV styles */
+@media (min-width: 3840px) {
+  .poetry-text {
+    font-size: 4rem;
+  }
+
+  .poetry-author {
+    font-size: 2.5rem;
+  }
+
+  .art-container.landscape {
+    gap: 8rem;
+  }
+
+  .next-button {
+    padding: 2rem 4rem;
+    font-size: 1.8rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-transition {
+  animation: fadeIn 0.5s ease-in;
+}
