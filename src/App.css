@@ -352,34 +352,40 @@ body {
   color: #e0e0e0;
 }
 
-/* Mobile styles */
-@media (max-width: 768px) {
+/* Mobile styles - Portrait */
+@media (max-width: 768px) and (orientation: portrait) {
   .app {
-    padding: 1rem;
+    padding: 0;
     background-color: #f5f5f5 !important;
   }
 
   .art-container {
-    flex-direction: column;
-    gap: 2rem;
+    flex-direction: column !important;
+    gap: 0;
     height: 100vh;
     overflow: hidden;
   }
 
-  .art-container.landscape {
-    flex-direction: column;
-    gap: 2rem;
+  .art-container.landscape,
+  .art-container.portrait {
+    flex-direction: column !important;
+    gap: 0;
   }
 
   .art-image-wrapper {
-    max-width: 100%;
-    max-height: 50vh;
+    width: 100% !important;
+    height: 50vh !important;
+    flex: none !important;
+    padding: 1rem;
     background: transparent !important;
   }
 
-  .art-container.portrait .art-image-wrapper {
-    max-width: 100%;
-    max-height: 50vh;
+  .art-container.portrait .art-image-wrapper,
+  .art-container.landscape .art-image-wrapper {
+    width: 100% !important;
+    height: 50vh !important;
+    flex: none !important;
+    padding: 1rem;
     background: transparent !important;
   }
 
@@ -390,21 +396,38 @@ body {
   }
 
   .poetry-container {
-    max-width: 100%;
+    width: 100% !important;
+    height: 50vh !important;
+    flex: none !important;
+    padding: 1rem;
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     text-align: center;
   }
 
-  .art-container.landscape .poetry-container {
-    max-width: 100%;
+  .art-container.landscape .poetry-container,
+  .art-container.portrait .poetry-container {
+    width: 100% !important;
+    height: 50vh !important;
+    flex: none !important;
+    padding: 1rem;
+    padding-top: 1.5rem;
     text-align: center;
+    justify-content: flex-start;
   }
 
   .poetry-text {
-    font-size: 120px !important;
+    font-size: clamp(1.5rem, 5vw, 3rem) !important;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
   }
 
   .poetry-author {
-    font-size: clamp(0.9rem, 3vw, 1.2rem);
+    font-size: clamp(1rem, 3vw, 2rem) !important;
+    text-align: center !important;
   }
 
   .controls {
@@ -474,16 +497,16 @@ body {
 /* Mobile landscape styles */
 @media (max-width: 768px) and (orientation: landscape) {
   .app {
-    padding: 0.5rem;
+    padding: 0;
     height: 100vh;
     overflow: hidden;
   }
 
   .art-container {
     flex-direction: row !important;
-    gap: 1rem;
+    gap: 0;
     height: 100vh;
-    max-height: 100vh;
+    width: 100%;
     overflow: hidden;
     padding: 0;
     margin: 0;
@@ -492,55 +515,60 @@ body {
   .art-container.landscape,
   .art-container.portrait {
     flex-direction: row !important;
-    gap: 1rem;
+    gap: 0;
     align-items: center;
     justify-content: center;
   }
 
   .art-image-wrapper {
-    max-width: 50%;
-    max-height: 85vh;
-    flex: 1;
+    width: 50% !important;
+    height: 100vh !important;
+    flex: none !important;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 1rem;
     background: transparent !important;
   }
 
   .art-container.landscape .art-image-wrapper,
   .art-container.portrait .art-image-wrapper {
-    max-width: 50%;
-    max-height: 85vh;
-    flex: 1;
+    width: 50% !important;
+    height: 100vh !important;
+    flex: none !important;
+    padding: 1rem;
     background: transparent !important;
   }
 
   .poetry-container {
-    max-width: 45%;
-    flex: 1;
+    width: 50% !important;
+    height: 100vh !important;
+    flex: none !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: left;
-    padding: 0 1rem;
+    padding: 1rem;
   }
 
   .art-container.landscape .poetry-container,
   .art-container.portrait .poetry-container {
-    max-width: 45%;
+    width: 50% !important;
+    height: 100vh !important;
+    flex: none !important;
     text-align: left;
-    flex: 1;
-    padding: 0 1rem;
+    padding: 1rem;
   }
 
   .poetry-text {
-    font-size: 120px !important;
-    line-height: 1.3;
+    font-size: clamp(1.2rem, 4vw, 2.5rem) !important;
+    line-height: 1.2;
     margin-bottom: 0.5rem;
   }
 
   .poetry-author {
-    font-size: clamp(0.8rem, 2.5vw, 1rem);
+    font-size: clamp(0.8rem, 2.5vw, 1.5rem) !important;
+    text-align: right !important;
   }
 
   .controls {
